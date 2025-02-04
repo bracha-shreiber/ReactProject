@@ -53,6 +53,7 @@ const recipeSlice = createSlice({
         
        })
        .addCase(addRecipe.fulfilled, (state, action) =>{
+        
          state.recipes.push(action.payload);
        })
        .addCase(addRecipe.rejected, (state, action) => {

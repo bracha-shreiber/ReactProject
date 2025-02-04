@@ -10,7 +10,7 @@ const ShowRecipe = ({recipe}:{recipe:Recipe | undefined}) =>{
     <p>id of author:{recipe?.authorId}</p>
     
     <ul>
-        {recipe?.ingredients.map((i,index)=><li key={index}>{i}</li>)}
+        {recipe?.ingredients?.map((i,index)=><li key={index}>{i.toString()}</li>)}
     </ul>
     <p>{recipe?.instructions}</p>
     </>)
