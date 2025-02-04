@@ -34,7 +34,7 @@ export default ({update,closeForm}:{update:boolean,closeForm:()=>void}) => {
           phone: updatedUser.phone
         }, {
           headers: {
-            'user-id': user.id // Replace with the actual user ID
+            'user-id': user.id 
           }
         });
       }

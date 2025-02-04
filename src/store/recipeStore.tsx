@@ -1,7 +1,6 @@
 import axios from "axios";
 import { Recipe } from "../types/recipe";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "./store";
 
 export const fetchRecipes = createAsyncThunk('recipes/fetch',async(_,thunkAPI) => {
     try{
@@ -61,6 +60,4 @@ const recipeSlice = createSlice({
        })
 }
 })
-
-//export const selectRecipe= (state:RootState)=>state.recipe;
 export default recipeSlice;

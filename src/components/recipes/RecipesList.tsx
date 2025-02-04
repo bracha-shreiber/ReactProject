@@ -8,25 +8,62 @@ import AddRecipe from "./AddRecipe";
 import { IsLoggedIn } from "../../App";
 
 
-export default ()=>{
+// export default ()=>{
+//     const dispatch = useDispatch<AppDispatch>();
+//     const recipes = useSelector((state:RootState)=>state.recipes.recipes);
+//     const [viewRecipe, setViewRecipe] = useState<boolean>(false);
+//     const [keepRecipe,setKeepRecipe] = useState<Recipe>();
+//     const [addRecipe,setAddRecipe] = useState<boolean>(false);
+//     const handleRecipe = (id:number)=>{
+//         setKeepRecipe(recipes?.find(r=>r.id==id));
+//         setViewRecipe(true);
+//     }
+//     useEffect(()=>{
+//         dispatch(fetchRecipes());
+//     },[dispatch]);
+//     const {LoggedIn,} = useContext(IsLoggedIn);
+//     return (<>
+//     {recipes?.map((r :Recipe)=><div key={r.id}>
+//         <a href="#" onClick={()=>handleRecipe(r.id)}>{r.title}</a></div>)}
+//         {viewRecipe&&<ShowRecipe recipe={keepRecipe}></ShowRecipe>}
+//         {LoggedIn&&<button onClick={()=>{setAddRecipe(true)}}>Add Recipe</button>}
+//         {addRecipe&&<AddRecipe></AddRecipe>}
+//     </>)
+// }
+import { Button, Grid } from "@mui/material";
+
+export default () => {
     const dispatch = useDispatch<AppDispatch>();
-    const recipes = useSelector((state:RootState)=>state.recipes.recipes);
+    const recipes = useSelector((state: RootState) => state.recipes.recipes);
     const [viewRecipe, setViewRecipe] = useState<boolean>(false);
-    const [keepRecipe,setKeepRecipe] = useState<Recipe>();
-    const [addRecipe,setAddRecipe] = useState<boolean>(false);
-    const handleRecipe = (id:number)=>{
-        setKeepRecipe(recipes?.find(r=>r.id==id));
+    const [keepRecipe, setKeepRecipe] = useState<Recipe>();
+    const [addRecipe, setAddRecipe] = useState<boolean>(false);
+
+    const handleRecipe = (id: number) => {
+        setKeepRecipe(recipes?.find(r => r.id === id));
         setViewRecipe(true);
-    }
-    useEffect(()=>{
+    };
+
+    useEffect(() => {
         dispatch(fetchRecipes());
-    },[dispatch]);
-    const {LoggedIn,} = useContext(IsLoggedIn);
-    return (<>
-    {recipes?.map((r :Recipe)=><div key={r.id}>
-        <a href="#" onClick={()=>handleRecipe(r.id)}>{r.title}</a></div>)}
-        {viewRecipe&&<ShowRecipe recipe={keepRecipe}></ShowRecipe>}
-        {LoggedIn&&<button onClick={()=>{setAddRecipe(true)}}>Add Recipe</button>}
-        {addRecipe&&<AddRecipe></AddRecipe>}
-    </>)
+    }, [dispatch]);
+
+    const { LoggedIn } = useContext(IsLoggedIn);
+
+    return (
+        <Grid container direction="column">
+            <Grid item xs>
+                {recipes?.map((r: Recipe) => (
+                    <div key={r.id}>
+                        <a href="#" onClick={() => handleRecipe(r.id)}>{r.title}</a>
+                    </div>
+                ))}
+                {LoggedIn && <Button onClick={() => { setAddRecipe(true) }}>Add Recipe</Button>}
+                {addRecipe && <AddRecipe />}
+            </Grid>
+            <Grid item xs>
+                {viewRecipe && <ShowRecipe recipe={keepRecipe} />}
+            </Grid>
+        </Grid>
+    );
 }

@@ -2,17 +2,18 @@ import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Box, Modal, TextField, Button, Typography, Tooltip, Dialog, DialogTitle, DialogContent } from "@mui/material";
+import { Box, TextField, Button, Dialog, DialogTitle, DialogContent } from "@mui/material";
 import { IsLoggedIn, url, userContext } from "../../App";
+import { User } from "../../types/user";
 
 export default ({ state ,setClose}: { state: boolean, setClose:Function}) => {
-    const { user, userDispatch } = useContext(userContext);
+    const { user,userDispatch } = useContext(userContext);
     const { setLoggedIn } = useContext(IsLoggedIn);
     const { register, handleSubmit, formState: { errors } } = useForm();
     const navigate = useNavigate(); 
-
-    const onSubmit = async (userData: any) => {
+    const onSubmit =  async (userData: any) => {
         try {
+            debugger;
             const str = url + '/' + (state === true ? "login" : "register");
             const res = await axios.post(str, {
                 email: userData.email,
@@ -27,14 +28,16 @@ export default ({ state ,setClose}: { state: boolean, setClose:Function}) => {
                 });
                 setLoggedIn(true); // Update the login state
             } else {
+                
                 userDispatch({
                     type: "LOGIN",
                     data: {
-                        id: +res.data.id,
+                        id: +res.data.userId,
                         email: userData.email,
                         password: userData.password
                     }
                 });
+
                 setLoggedIn(true);
             }
         } catch (error) {
@@ -62,10 +65,6 @@ export default ({ state ,setClose}: { state: boolean, setClose:Function}) => {
         <DialogTitle>{state ? "SignIn" : "SignUp"}</DialogTitle>
         <DialogContent>
              <Box sx={{ width: 300, padding: 2, backgroundColor: 'white', margin: 'auto', marginTop: '10%' }}>
-            
-                {/* <Typography variant="h6" component="h2" sx={{ mb: 2 }}>
-                    {state ? "Login" : "Register"}
-                </Typography> */}
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <TextField 
                         variant="outlined"
@@ -102,56 +101,3 @@ export default ({ state ,setClose}: { state: boolean, setClose:Function}) => {
             </Dialog>
     );
 }
-
-
-// import { useContext } from "react";
-// import { useForm } from "react-hook-form";
-// import axios from "axios";
-// import { Modal } from "@mui/material";
-// import { IsLoggedIn } from "../homePage"; // Adjust the import path as necessary
-// import { url } from "../../AppLayout";
-
-// export default ({ state, close, showModal}: { state: boolean, close: Function, showModal: boolean}) => {
-//     const { register, handleSubmit, formState: { errors } } = useForm();
-//     const {  setLoggedIn } = useContext(IsLoggedIn);
-
-//     const onSubmit = async (userData: any) => {
-//         try {
-//             const endpoint = state ? "login" : "register";
-//             const res = await axios.post(`${url}/${endpoint}`, {
-//                 email: userData.email,
-//                 password: userData.password
-//             });
-
-//             if (res.data.user) {
-                
-//             }
-//         } catch (error) {
-//             // Handle errors...
-//         } finally {
-//             close();
-//         }
-//     };
-
-//     return (
-//         <Modal open={showModal}>
-//             <form onSubmit={handleSubmit(onSubmit)}>
-//                 <input 
-//                     type="text" 
-//                     placeholder="Enter your email" 
-//                     {...register("email", { required: true })} 
-//                 />
-//                 {errors.email && <span>This field is required</span>}
-
-//                 <input 
-//                     type="password" 
-//                     placeholder="Enter your password" 
-//                     {...register("password", { required: true })} 
-//                 />
-//                 {errors.password && <span>This field is required</span>}
-
-//                 <button type="submit">Login</button>
-//             </form>
-//         </Modal>
-//     );
-// };
