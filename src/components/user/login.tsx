@@ -1,12 +1,11 @@
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
-import AppLayout, { url, userContext } from "../../AppLayout";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Box, Modal, TextField, Button, Typography } from "@mui/material";
-import { IsLoggedIn } from "../homePage";
+import { Box, Modal, TextField, Button, Typography, Tooltip, Dialog, DialogTitle, DialogContent } from "@mui/material";
+import { IsLoggedIn, url, userContext } from "../../App";
 
-export default ({ state, close, showModal }: { state: boolean, close: Function, showModal: boolean }) => {
+export default ({ state ,setClose}: { state: boolean, setClose:Function}) => {
     const { user, userDispatch } = useContext(userContext);
     const { setLoggedIn } = useContext(IsLoggedIn);
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -47,24 +46,26 @@ export default ({ state, close, showModal }: { state: boolean, close: Function, 
                     navigate("/home");
                     return;
                 }
-                console.error("Error response:", error.response);
+                console.error("Error response:", error.response?.data?.message);
             } else {
                 console.error("Error:", error);
                 alert("Error: Unexpected error");
             }
         } finally {
-            close();
+            setClose(false);
             console.log("i closed");
         }
     };
 
     return (
-        <Modal open={showModal} onClose={() => close()}>
+        <Dialog open={true} onClose={()=>setClose(false)}>
+        <DialogTitle>{state ? "SignIn" : "SignUp"}</DialogTitle>
+        <DialogContent>
              <Box sx={{ width: 300, padding: 2, backgroundColor: 'white', margin: 'auto', marginTop: '10%' }}>
             
-                <Typography variant="h6" component="h2" sx={{ mb: 2 }}>
+                {/* <Typography variant="h6" component="h2" sx={{ mb: 2 }}>
                     {state ? "Login" : "Register"}
-                </Typography>
+                </Typography> */}
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <TextField 
                         variant="outlined"
@@ -97,7 +98,8 @@ export default ({ state, close, showModal }: { state: boolean, close: Function, 
                     </Button>
                 </form>
             </Box>
-        </Modal>
+            </DialogContent>
+            </Dialog>
     );
 }
 

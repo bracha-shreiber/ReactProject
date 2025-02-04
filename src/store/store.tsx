@@ -1,6 +1,6 @@
 import {combineSlices, configureStore } from "@reduxjs/toolkit";
 import recipeSlice from "./recipeStore"
-import { ErrorMessage } from "./ErrorMessage";
+import { ErrorMessage } from "./ErrorSlice";
 
 const store = configureStore(
     {
@@ -8,8 +8,6 @@ const store = configureStore(
          recipeSlice,
         ErrorMessage,
         ) 
-       
-        
     },
 )
 export type RootState = ReturnType<typeof store.getState>;

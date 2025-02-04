@@ -1,13 +1,11 @@
 import { Box, Button, Modal, TextField } from "@mui/material";
 import axios from "axios";
 import { useContext, useState } from "react";
-import { url, userContext } from "../../AppLayout";
 import { User } from "../../types/user";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
-import { setError } from "../../store/ErrorMessage";
-
-
+import { setError } from "../../store/ErrorSlice";
+import { url, userContext } from "../../App";
 export default ({update,closeForm}:{update:boolean,closeForm:()=>void}) => {
     const { user, userDispatch } = useContext(userContext);
     const [updatedUser, setUpdatedUser] = useState<User>(user);  
@@ -19,7 +17,6 @@ export default ({update,closeForm}:{update:boolean,closeForm:()=>void}) => {
         [e.target.name]: e.target.value,
       });
     };
-  
     const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
       userDispatch({
@@ -27,6 +24,7 @@ export default ({update,closeForm}:{update:boolean,closeForm:()=>void}) => {
         data: updatedUser,
       });
       try {
+       console.log(user);
         console.log('Sending update request with user ID:', user.id);
         const res = await axios.put(url + '/', {
           firstName: updatedUser.firstName,
@@ -66,24 +64,13 @@ export default ({update,closeForm}:{update:boolean,closeForm:()=>void}) => {
         setError('');
       }
     };
-  
     return (
       <>
         <Modal open={update}>
-          <Box
-            sx={{
-              width: 300,
-              padding: 2,
-              backgroundColor: 'white',
-              margin: 'auto',
-              marginTop: '10%',
-              maxHeight: '80vh', 
-              overflowY: 'auto'  
-            }}
-          >
+          <Box sx={{ width: 300, padding: 2, backgroundColor: 'white', margin: 'auto',
+            marginTop: '10%', maxHeight: '80vh', overflowY: 'auto'}}>
             <form onSubmit={handleSubmit}>
-              <TextField
-                label="First Name"
+              <TextField label="First Name"
                 value={updatedUser.firstName}
                 name="firstName"
                 onChange={handleChange}
@@ -106,7 +93,7 @@ export default ({update,closeForm}:{update:boolean,closeForm:()=>void}) => {
               <TextField
                 label="Password"
                 type="password"
-                value={updatedUser.password}
+                value={user.password}
                 name="password"
                 onChange={handleChange}
                 fullWidth
@@ -119,9 +106,9 @@ export default ({update,closeForm}:{update:boolean,closeForm:()=>void}) => {
                 fullWidth
               />
               <TextField
-                label="Phone Number"
+                label="Phone"
                 value={updatedUser.phone}
-                name="phoneNumber"
+                name="phone"
                 onChange={handleChange}
                 fullWidth
               />
