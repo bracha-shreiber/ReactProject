@@ -70,6 +70,8 @@ export default () => {
     }
 
     return (
+        <>
+        {added&&
         <Box component="form" onSubmit={handleSubmit(OnSubmit)} sx={{ padding: 2 }}>
             <TextField label="Title" {...register("title")} error={!!errors.title} helperText={errors.title ? errors.title.message : ""} fullWidth />
             <TextField label="Description" {...register("description")} error={!!errors.description} helperText={errors.description ? errors.description.message : ""} fullWidth />
@@ -82,6 +84,7 @@ export default () => {
             <Button type="button" onClick={() => append({ name: "" })}>Add Ingredient</Button>
             <TextField label="Instructions" {...register("instructions")} error={!!errors.instructions} helperText={errors.instructions ? errors.instructions.message : ""} fullWidth />
             <Button type="submit">Add</Button>
-        </Box>
+        </Box>}
+        </>
     );
 }
