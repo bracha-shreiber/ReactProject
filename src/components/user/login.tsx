@@ -13,7 +13,6 @@ export default ({ state ,setClose}: { state: boolean, setClose:Function}) => {
     const navigate = useNavigate(); 
     const onSubmit =  async (userData: any) => {
         try {
-            debugger;
             const str = url + '/' + (state === true ? "login" : "register");
             const res = await axios.post(str, {
                 email: userData.email,

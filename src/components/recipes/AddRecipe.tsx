@@ -1,82 +1,4 @@
-// import { useForm, useFieldArray } from "react-hook-form";
-// import { useDispatch } from "react-redux";
-// import { AppDispatch } from "../../store/store";
-// import { addRecipe, fetchRecipes } from "../../store/recipeStore";
-// import { yupResolver } from "@hookform/resolvers/yup";
-// import { array, object, string } from "yup";
-// import { useContext, useState } from "react";
-// import { userContext } from "../../App";
-// import { useNavigate } from "react-router-dom";
 
-// export default () => {
-//     const [added,setAdded]=useState<boolean>(true);
-//     const schema = object({
-//         title: string().required(),
-//         description: string().required(),
-//         ingredients: array().of(object({
-//             name: string().required() 
-//         })).required(),
-//         instructions: string().required()
-//     }).required();
-
-//     const { reset,control, register, handleSubmit, formState: { errors } } = useForm({
-//         resolver: yupResolver(schema)
-//     });
-// const navigate = useNavigate();
-//     const { fields, append, remove } = useFieldArray({
-//         control, 
-//         name: "ingredients" 
-//     });
-
-//     const dispatch = useDispatch<AppDispatch>();
-//     const { user } = useContext(userContext);
-
-//     const OnSubmit = async (data: any) => {
-//         try {
-//             await dispatch(addRecipe({
-//                 ...data,
-//                 authorId: user.id
-//             })).unwrap();
-//             dispatch(fetchRecipes()); 
-//             reset();
-//             navigate('/recipes');
-//         } catch (error) {
-//             console.error("Failed to add recipe:", error);
-//         }
-//         finally{setAdded(false);}
-//     }
-
-//     return (
-//         <>
-//         {added&&
-//             <form onSubmit={handleSubmit(OnSubmit)}>
-//                 <input type="text" {...register("title")} placeholder="Title" />
-//                 {errors.title && <p>{errors.title.message}</p>}
-                
-//                 <input type="text" {...register("description")} placeholder="Description" />
-//                 {errors.description && <p>{errors.description.message}</p>}
-                
-//                 {fields.map((item, index) => (
-//                     <div key={item.id}>
-//                         <input
-//                             type="text"
-//                             {...register(`ingredients.${index}.name`)} // Use the array structure
-//                             placeholder="Enter ingredient"
-//                         />
-//                         <button type="button" onClick={() => remove(index)}>Remove</button>
-//                     </div>
-//                 ))}
-//                 <button type="button" onClick={() => append({ name: "" })}>Add Ingredient</button>
-                
-//                 <input type="text" {...register("instructions")} placeholder="Instructions" />
-//                 {errors.instructions && <p>{errors.instructions.message}</p>}
-                
-//                 <button type="submit">Add</button>
-//             </form>
-// }
-//         </>
-//     );
-// }
 import { useForm, useFieldArray } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../store/store";
@@ -87,6 +9,8 @@ import { useContext, useState } from "react";
 import { userContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 import { Button, TextField, Box } from "@mui/material";
+import { setError } from "../../store/ErrorSlice";
+import axios from "axios";
 
 export default () => {
     const [added, setAdded] = useState<boolean>(true);
@@ -121,7 +45,25 @@ export default () => {
             reset();
             navigate('/recipes');
         } catch (error) {
-            console.error("Failed to add recipe:", error);
+            if (axios.isAxiosError(error)) {
+              const status = error.response?.status;
+              switch (status) {
+                case 400:
+                  dispatch(setError("Bad Request: The server could not understand the request due to invalid syntax."));
+                  break;
+                case 401:
+                  dispatch(setError("Unauthorized: Access is denied due to invalid credentials."));
+                  break;
+                case 403:
+                  dispatch(setError("Forbidden: You do not have permission to access this resource."));
+                  break;
+                default:
+                  dispatch(setError("An unexpected error occurred."));
+                  break;
+              }
+            } else {
+              dispatch(setError("An unexpected error occurred."));
+            }
         } finally {
             setAdded(false);
         }
