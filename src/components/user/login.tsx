@@ -4,14 +4,13 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Box, TextField, Button, Dialog, DialogTitle, DialogContent } from "@mui/material";
 import { IsLoggedIn, url, userContext } from "../../App";
-import { User } from "../../types/user";
 
-export default ({ state ,setClose}: { state: boolean, setClose:Function}) => {
-    const { user,userDispatch } = useContext(userContext);
+export default ({ state, setClose }: { state: boolean, setClose: Function }) => {
+    const { user, userDispatch } = useContext(userContext);
     const { setLoggedIn } = useContext(IsLoggedIn);
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const navigate = useNavigate(); 
-    const onSubmit =  async (userData: any) => {
+    const navigate = useNavigate();
+    const onSubmit = async (userData: any) => {
         try {
             const str = url + '/' + (state === true ? "login" : "register");
             const res = await axios.post(str, {
@@ -25,9 +24,9 @@ export default ({ state ,setClose}: { state: boolean, setClose:Function}) => {
                     type: "LOGIN",
                     data: res.data.user
                 });
-                setLoggedIn(true); // Update the login state
+                setLoggedIn(true); 
             } else {
-                
+
                 userDispatch({
                     type: "LOGIN",
                     data: {
@@ -60,43 +59,43 @@ export default ({ state ,setClose}: { state: boolean, setClose:Function}) => {
     };
 
     return (
-        <Dialog open={true} onClose={()=>setClose(false)}>
-        <DialogTitle>{state ? "SignIn" : "SignUp"}</DialogTitle>
-        <DialogContent>
-             <Box sx={{ width: 300, padding: 2, backgroundColor: 'white', margin: 'auto', marginTop: '10%' }}>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <TextField 
-                        variant="outlined"
-                        label="Email"
-                        type="text"
-                        fullWidth
-                        margin="normal"
-                        {...register("email", { required: true })} 
-                        error={!!errors.email}
-                        helperText={errors.email ? "This field is required" : ""}
-                    />
-                    <TextField 
-                        variant="outlined"
-                        label="Password"
-                        type="password"
-                        fullWidth
-                        margin="normal"
-                        {...register("password", { required: true })} 
-                        error={!!errors.password}
-                        helperText={errors.password ? "This field is required" : ""}
-                    />
-                    <Button 
-                        type="submit" 
-                        variant="contained" 
-                        color="primary" 
-                        fullWidth
-                        sx={{ mt: 2 }}
-                    >
-                        {state ? "Login" : "Register"}
-                    </Button>
-                </form>
-            </Box>
+        <Dialog open={true} onClose={() => setClose(false)}>
+            <DialogTitle>{state ? "SignIn" : "SignUp"}</DialogTitle>
+            <DialogContent>
+                <Box sx={{ width: 300, padding: 2, backgroundColor: 'white', margin: 'auto', marginTop: '10%' }}>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <TextField
+                            variant="outlined"
+                            label="Email"
+                            type="text"
+                            fullWidth
+                            margin="normal"
+                            {...register("email", { required: true })}
+                            error={!!errors.email}
+                            helperText={errors.email ? "This field is required" : ""}
+                        />
+                        <TextField
+                            variant="outlined"
+                            label="Password"
+                            type="password"
+                            fullWidth
+                            margin="normal"
+                            {...register("password", { required: true })}
+                            error={!!errors.password}
+                            helperText={errors.password ? "This field is required" : ""}
+                        />
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            fullWidth
+                            sx={{ mt: 2 }}
+                        >
+                            {state ? "Login" : "Register"}
+                        </Button>
+                    </form>
+                </Box>
             </DialogContent>
-            </Dialog>
+        </Dialog>
     );
 }

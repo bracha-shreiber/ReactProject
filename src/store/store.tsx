@@ -1,13 +1,13 @@
-import {combineSlices, configureStore } from "@reduxjs/toolkit";
+import { combineSlices, configureStore } from "@reduxjs/toolkit";
 import recipeSlice from "./recipeStore"
 import { ErrorMessage } from "./ErrorSlice";
 
 const store = configureStore(
     {
-        reducer:combineSlices(
-         recipeSlice,
-        ErrorMessage,
-        ) 
+        reducer: combineSlices(
+            recipeSlice,
+            ErrorMessage,
+        )
     },
 )
 export type RootState = ReturnType<typeof store.getState>;

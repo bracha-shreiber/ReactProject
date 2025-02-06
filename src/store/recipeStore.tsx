@@ -2,62 +2,63 @@ import axios from "axios";
 import { Recipe } from "../types/recipe";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export const fetchRecipes = createAsyncThunk('recipes/fetch',async(_,thunkAPI) => {
-    try{
+export const fetchRecipes = createAsyncThunk('recipes/fetch', async (_, thunkAPI) => {
+    try {
         const response = await axios.get('http://localhost:3000/api/recipes');
         return response.data as Recipe[];
     }
-    catch(error){
+    catch (error) {
         return thunkAPI.rejectWithValue((error as Error).message)
     }
 });
 
-export const addRecipe = createAsyncThunk('recipe/add',async (recipe:Recipe, thunkAPI) => {
-    try{
+export const addRecipe = createAsyncThunk('recipes/add', async (recipe: Recipe, thunkAPI) => {
+    try {
         console.log(recipe);
-        const response = await axios.post('http://localhost:3000/api/recipes', 
-        {
-           title:recipe.title,
-           description:recipe.description,
-           ingredients:recipe.ingredients,
-           instructions:recipe.instructions,
-        },{
+        const response = await axios.post('http://localhost:3000/api/recipes',
+            {
+
+                title: recipe.title,
+                description: recipe.description,
+                ingredients: recipe.ingredients,
+                instructions: recipe.instructions,
+            }, {
             headers: {
-                'user-id':recipe.authorId
+                'user-id': recipe.authorId
             }
         })
         return response.data;
     }
-    catch(error){
+    catch (error) {
         return thunkAPI.rejectWithValue((error as Error).message);
     }
 })
 const recipeSlice = createSlice({
-    name:'recipes',
+    name: 'recipes',
     initialState: {
-      recipes: [] as Recipe[], loading:true
+        recipes: [] as Recipe[], loading: true
     },
     reducers: {},
     extraReducers: (builder) => {
         builder
-        // .addCase(fetchRecipes.pending, (state) =>{
+            // .addCase(fetchRecipes.pending, (state) =>{
 
-        // })
-        .addCase(fetchRecipes.fulfilled, (state,action) => {
-            console.log('fulfilled');
-           state.recipes=action.payload;
-        })
-       .addCase(fetchRecipes.rejected, (state, action) => {
-        console.log('failed');
-        
-       })
-       .addCase(addRecipe.fulfilled, (state, action) =>{
-        
-         state.recipes.push(action.payload);
-       })
-       .addCase(addRecipe.rejected, (state, action) => {
-        console.log('failed to add recipe', action.payload);
-       })
-}
+            // })
+            .addCase(fetchRecipes.fulfilled, (state, action) => {
+                console.log('fulfilled');
+                state.recipes = action.payload;
+            })
+            .addCase(fetchRecipes.rejected, (state, action) => {
+                console.log('failed');
+
+            })
+            .addCase(addRecipe.fulfilled, (state, action) => {
+
+                state.recipes.push(action.payload);
+            })
+            .addCase(addRecipe.rejected, (state, action) => {
+                console.log('failed to add recipe', action.payload);
+            })
+    }
 })
 export default recipeSlice;

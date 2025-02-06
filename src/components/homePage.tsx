@@ -16,25 +16,27 @@ const HomePage = () => {
     const [sign, setSign] = useState<boolean>(false);
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', padding: 2 }}>
-            {!LoggedIn && (
-                <>
-                    <Button variant="contained" onClick={() => { setSign(true); setMode('signIn') }}>Sign In</Button>
-                    <Button variant="contained" onClick={() => { setSign(true); setMode('signUp') }}>Sign Up</Button>
-                </>
-            )}
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', padding: 2, marginTop: 8 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-start', left: '3%', position: 'fixed', top: 60 }}>
+                {!LoggedIn && (
+                    <>
+                        <Button variant="contained" onClick={() => { setSign(true); setMode('signIn') }} sx={{ backgroundColor: '#FF0000', color: '#FFFFFF' }}>Sign In</Button>
+                        <Button variant="contained" onClick={() => { setSign(true); setMode('signUp') }} sx={{ backgroundColor: '#FF0000', color: '#FFFFFF', marginLeft: 1 }}>Sign Up</Button>
+                    </>
+                )}
+                {LoggedIn && (
+                    <Box>
+                        <Button variant="contained" onClick={() => setUpdate(true)} sx={{ backgroundColor: '#FF0000', color: '#FFFFFF', marginLeft: 1 }}>Update</Button>
+                        <Button variant="contained" onClick={() => {
+                            navigate("/"); setLoggedIn(false); userDispatch({ type: "LOGOUT", data: {} as User });
+                        }} sx={{ backgroundColor: '#FF0000', color: '#FFFFFF', marginLeft: 1 }}>Sign Out</Button>
+                    </Box>
+                )}
+            </Box>
             {sign && <Login state={mode === "signIn"} setClose={setSign}></Login>}
-            {LoggedIn && <Button variant="contained" onClick={() => setUpdate(true)}>Update</Button>}
             {update && <UpdateUser update={update} closeForm={() => setUpdate(false)} />}
             {LoggedIn && <Avatar />}
-            {LoggedIn && (
-                <Button variant="contained" onClick={() => {
-                    navigate("/"); setLoggedIn(false); userDispatch({ type: "LOGOUT", data: {} as User });
-                }}>Sign Out</Button>
-            )}
         </Box>
     );
 }
-
 export default HomePage;
-
