@@ -21,11 +21,11 @@ function App() {
   return (
     <>
       <userContext.Provider value={{ user, userDispatch }}>
-        <IsLoggedIn.Provider value={{ LoggedIn, setLoggedIn }}>
+        <IsLoggedIn value={{ LoggedIn, setLoggedIn }}>
           <Provider store={store}>
             <RouterProvider router={RouterApp}></RouterProvider>
           </Provider>
-        </IsLoggedIn.Provider>
+        </IsLoggedIn>
       </userContext.Provider>
     </>
   )

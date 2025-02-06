@@ -70,20 +70,21 @@ export default () => {
 
     return (
         <>
-            {added &&
-                <Box component="form" onSubmit={handleSubmit(OnSubmit)} sx={{ padding: 2 }} position={'fixed'} top={'15%'} width={'40%'} right={'30%'}>
-                    <TextField label="Title" {...register("title")} error={!!errors.title} helperText={errors.title ? errors.title.message : ""} fullWidth />
-                    <TextField label="Description" {...register("description")} error={!!errors.description} helperText={errors.description ? errors.description.message : ""} fullWidth />
-                    {fields.map((item, index) => (
-                        <div key={item.id}>
-                            <TextField sx={{color:"red"}} label="Ingredient" {...register(`ingredients.${index}.name`)} error={!!errors.ingredients?.[index]?.name} helperText={errors.ingredients?.[index]?.name ? errors.ingredients[index].name.message : "" } />
-                            <Button type="button" onClick={() => remove(index)} sx={{ backgroundColor: 'white', color: 'red' }}>Remove</Button>
-                        </div>
-                    ))}
-                    <Button type="button" onClick={() => append({ name: "" })} sx={{ backgroundColor: 'red', color: 'white' }}>Add Ingredient</Button>
-                    <TextField label="Instructions" {...register("instructions")} error={!!errors.instructions} helperText={errors.instructions ? errors.instructions.message : ""} fullWidth />
-                    <Button type="submit" sx={{ backgroundColor: 'white', color: 'red' }}>Add</Button>
-                </Box>}
+           {added &&
+    <Box component="form" onSubmit={handleSubmit(OnSubmit)} sx={{ padding: 2 }} position={'fixed'} top={'15%'} width={'40%'} right={'30%'}>
+        <TextField label="Title" {...register("title")} error={!!errors.title} helperText={errors.title ? errors.title.message : ""} fullWidth />
+        <TextField label="Description" {...register("description")} error={!!errors.description} helperText={errors.description ? errors.description.message : ""} fullWidth />
+        {fields.map((item, index) => (
+            <div key={item.id}>
+                <TextField sx={{ color: "red" }} label="Ingredient" {...register(`ingredients.${index}.name`)} error={!!errors.ingredients?.[index]?.name} helperText={errors.ingredients?.[index]?.name ? errors.ingredients[index].name.message : ""} />
+                <Button type="button" onClick={() => remove(index)} sx={{ backgroundColor: 'white', color: 'red' }}>Remove</Button>
+            </div>
+        ))}
+        <Button type="button" onClick={() => append({ name: "" })} sx={{ backgroundColor: 'red', color: 'white' }}>Add Ingredient</Button>
+        <TextField label="Instructions" {...register("instructions")} error={!!errors.instructions} helperText={errors.instructions ? errors.instructions.message : ""} fullWidth />
+        <Button type="submit" sx={{ backgroundColor: 'white', color: 'red' }}>Add</Button>
+    </Box>
+}
         </>
     );
 }
